@@ -7,9 +7,11 @@ import java.util.stream.Collectors;
 
 public class Deck {
     private final List<Card> cards;
+    private final List<Card> discardPile;
 
     public Deck() {
         cards = new ArrayList<>();
+        discardPile = new ArrayList<>();
         for (Suit suit : Suit.values()) {
             for (Rank rank : Rank.values()) {
                 cards.add(new Card(suit, rank));
@@ -18,12 +20,19 @@ public class Deck {
     }
 
     public void shuffle() {
+        if (!discardPile.isEmpty()) {
+            cards.addAll(discardPile);
+            discardPile.clear();
+        }
         Collections.shuffle(cards);
     }
 
     public Card draw() {
         if (cards.isEmpty()) {
-            throw new IllegalStateException("No cards left in deck");
+            if (discardPile.isEmpty()) {
+                throw new IllegalStateException("Not enough cards left.");
+            }
+            shuffle();
         }
         return cards.removeLast();
     }
@@ -32,20 +41,31 @@ public class Deck {
         if (n < 0) {
             throw new IllegalArgumentException("Cannot draw negative number of cards");
         }
-        if (n > cards.size()) {
-            throw new IllegalStateException(
-                    String.format("Not enough cards left in deck. Requested: %d, Available: %d", n, cards.size())
-            );
+        if (n > remaining()) {
+            if (n > totalCards()) {
+                throw new IllegalStateException(
+                        String.format("Not enough cards left. Requested: %d, Available: %d", n, totalCards())
+                );
+            }
+            shuffle();
         }
         var drawn = new ArrayList<Card>();
         for (int i = 0; i < n; i++) {
-            drawn.add(cards.removeLast());
+            drawn.add(draw());
         }
         return drawn;
     }
 
+    public void discard(List<Card> playedCards) {
+        discardPile.addAll(playedCards);
+    }
+
     public int remaining() {
         return cards.size();
+    }
+
+    public int totalCards() {
+        return cards.size() + discardPile.size();
     }
 
     @Override

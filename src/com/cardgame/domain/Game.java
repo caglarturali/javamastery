@@ -37,15 +37,21 @@ public class Game {
     }
 
     public boolean isPlayable() {
-        return deck.remaining() >= players.size();
+        return players.size() >= 2 && deck.remaining() >= players.size();
     }
 
     public GameResult playRound() {
-        if (players.size() < 2) {
-            throw new IllegalStateException("Game requires at least 2 players");
+        if (!isPlayable()) {
+            throw new IllegalStateException("Not enough players or cards to play a round");
         }
-        if (deck.remaining() < players.size()) {
-            throw new IllegalStateException("Not enough cards to play a round");
+
+        // Collect all cards from previous round if any
+        var cardsToDiscard = players.stream()
+                .filter(Player::hasCard)
+                .map(Player::getCard)
+                .toList();
+        if (!cardsToDiscard.isEmpty()) {
+            deck.discard(cardsToDiscard);
         }
 
         // Deal cards to all players
