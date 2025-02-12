@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
 
-public class GameConsole {
+public class GameConsole implements AutoCloseable {
     private final PrintStream output;
     private final Scanner scanner;
     private final Game game;
@@ -19,6 +19,13 @@ public class GameConsole {
 
     public GameConsole() {
         this(System.in, System.out);
+    }
+
+    @Override
+    public void close() {
+        if (scanner != null) {
+            scanner.close();
+        }
     }
 
     public void start() {
@@ -80,6 +87,8 @@ public class GameConsole {
     }
 
     public static void main(String[] args) {
-        new GameConsole().start();
+        try (var console = new GameConsole()) {
+            console.start();
+        }
     }
 }
