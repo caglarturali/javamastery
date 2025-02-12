@@ -75,7 +75,7 @@ public class Game {
                 deck.remaining(),
                 players.size(),
                 players.stream()
-                        .map(p -> String.format("- %s", p.getName()))
+                        .map(p -> String.format("- %s", p))
                         .collect(Collectors.joining("\n"))
         );
     }

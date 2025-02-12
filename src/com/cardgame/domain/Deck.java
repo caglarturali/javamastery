@@ -1,5 +1,7 @@
 package com.cardgame.domain;
 
+import com.cardgame.config.DisplayConfig;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -74,11 +76,18 @@ public class Deck {
             return "Empty deck";
         }
 
-        return String.format("Deck: %d cards%n%s",
+        var baseOutput = String.format("Deck: %d cards, Discard: %d cards",
                 cards.size(),
-                cards.stream()
-                        .map(Card::getDisplay)
-                        .collect(Collectors.joining(", "))
-        );
+                discardPile.size());
+
+        return switch (DisplayConfig.getMode()) {
+            case DEBUG -> String.format("%s%n%s",
+                    baseOutput,
+                    cards.stream()
+                            .map(Card::getDisplay)
+                            .collect(Collectors.joining(", ")
+                            ));
+            case PLAYER -> baseOutput;
+        };
     }
 }

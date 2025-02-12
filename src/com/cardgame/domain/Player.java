@@ -1,5 +1,7 @@
 package com.cardgame.domain;
 
+import com.cardgame.config.DisplayConfig;
+
 public class Player {
     private final String name;
     private Card card;
@@ -27,6 +29,9 @@ public class Player {
 
     @Override
     public String toString() {
-        return String.format("%s: %s", getName(), hasCard() ? getCard().getDisplay() : "no card");
+        return switch (DisplayConfig.getMode()) {
+            case DEBUG -> String.format("%s (%s)", getName(), hasCard() ? getCard() : "no card");
+            case PLAYER -> getName();
+        };
     }
 }

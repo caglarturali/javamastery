@@ -1,5 +1,6 @@
 package com.cardgame;
 
+import com.cardgame.config.DisplayConfig;
 import com.cardgame.domain.Game;
 
 import java.io.InputStream;
@@ -56,30 +57,39 @@ public class GameConsole implements AutoCloseable {
     }
 
     private void playGame() {
-        output.println("\nGame ready!");
-        output.println(game);
+        var commands = "Commands: [Enter] play, [d] debug, [q] quit";
+        boolean running = true;
 
-        output.println("\nPress Enter to play a round (q to quit)");
+        output.printf("%n%s%n%s%n%n%s%n", "Game ready!", game, commands);
 
-        while (true) {
+        while (running) {
             String input = scanner.nextLine().trim().toLowerCase();
-            if (input.equals("q")) {
-                break;
-            }
-
-            try {
-                var result = game.playRound();
-                output.println("Round result:");
-                output.println(result);
-                if (game.isPlayable()) {
-                    output.println("\nReady for another round (q to quit)");
-                } else {
-                    output.println("\nEnd of cards. Play again!");
-                    break;
+            switch (input) {
+                case "q" -> {
+                    running = false;
                 }
-            } catch (IllegalStateException e) {
-                output.printf("Game over: %s%n", e.getMessage());
-                break;
+                case "d" -> {
+                    output.printf("%n%s%n%s%n%n%s%n",
+                            String.format("Switched to %s mode", DisplayConfig.toggleMode()),
+                            game,
+                            commands
+                    );
+                }
+                default -> {
+                    try {
+                        var result = game.playRound();
+                        output.printf("%s%n%s%n%n", "Round result:", result);
+                        if (game.isPlayable()) {
+                            output.printf("%s%n%s%n", "Ready for another round.", commands);
+                        } else {
+                            output.println("End of cards. Play again!");
+                            running = false;
+                        }
+                    } catch (IllegalStateException e) {
+                        output.printf("Game over: %s%n", e.getMessage());
+                        running = false;
+                    }
+                }
             }
         }
 
