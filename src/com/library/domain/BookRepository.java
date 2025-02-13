@@ -12,7 +12,5 @@ public interface BookRepository {
 
     List<BookCopy> findAllByTitle(String title);
 
-    Optional<BookCopy> findOneByISBN(String isbn);
-
     Optional<BookCopy> findOneById(String copyId);
 }

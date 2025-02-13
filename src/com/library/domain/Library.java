@@ -38,14 +38,6 @@ public class Library implements BookRepository {
     }
 
     @Override
-    public Optional<BookCopy> findOneByISBN(String isbn) {
-        return copiesByIsbn.getOrDefault(isbn, List.of())
-                .stream()
-                .filter(BookCopy::isAvailable)
-                .findFirst();
-    }
-
-    @Override
     public Optional<BookCopy> findOneById(String copyId) {
         try {
             UUID searchId = UUID.fromString(copyId);

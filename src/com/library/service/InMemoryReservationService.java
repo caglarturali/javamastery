@@ -16,11 +16,13 @@ public class InMemoryReservationService implements ReservationService {
     private final Map<UUID, Reservation> reservationsById;
 
     private final Library library;
+    private final BorrowingService borrowingService;
 
-    public InMemoryReservationService(Library library) {
+    public InMemoryReservationService(Library library, BorrowingService borrowingService) {
         this.reservationsByIsbn = new HashMap<>();
         this.reservationsById = new HashMap<>();
         this.library = library;
+        this.borrowingService = borrowingService;
     }
 
     @Override
@@ -30,7 +32,9 @@ public class InMemoryReservationService implements ReservationService {
             throw new BookNotFoundException(isbn);
         }
 
-        boolean hasAvailableCopy = bookCopies.stream().anyMatch(BookCopy::isAvailable);
+        boolean hasAvailableCopy = bookCopies.stream()
+                .map(BookCopy::getCopyId)
+                .noneMatch(borrowingService::isCurrentlyBorrowed);
 
         if (hasAvailableCopy) {
             throw new IllegalStateException(
