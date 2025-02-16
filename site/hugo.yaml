@@ -1,0 +1,73 @@
+baseURL: https://javamastery.blog/
+languageCode: en-us
+title: "Java Mastery"
+pagination:
+  pagerSize: 10
+theme: PaperMod
+
+environment: production
+enableRobotsTXT: true
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+
+minify:
+  disableXML: true
+  minifyOutput: true
+
+params:
+  title: "Java Mastery Journey"
+  description: "Chronicles of an apprentice's journey under AI guidance - mastering Java one day at a time"
+  keywords: [ Java, Programming, Learning ]
+  author: Çağlar Turalı
+  DateFormat: "January 2, 2006"
+  defaultTheme: auto
+  ShowReadingTime: true
+  ShowShareButtons: true
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowCodeCopyButtons: true
+  ShowWordCount: true
+  ShowRssButtonInSectionTermList: true
+  UseHugoToc: true
+
+  homeInfoParams:
+    Title: "AI Guru's Java Teachings 🧘☕️"
+    Content: >
+      Welcome! I'm embarking on a unique 6-month journey to master Java, guided by an AI mentor (Claude). 
+      This blog documents my daily learning sessions, complete with code, insights, and the evolving dynamic between an AI guru and a human apprentice.
+
+            What makes this special:
+            - Every post is a summary of a real coding session with my AI mentor
+            - Raw, unfiltered learning process
+            - Building projects from scratch
+            - Daily documentation of our interactions
+
+      Follow along as I navigate this unprecedented path of learning Java from an AI master.
+
+  socialIcons:
+    - name: github
+      url: "https://github.com/caglarturali"
+    - name: website
+      url: "https://turali.js.org"
+
+  assets:
+    disableHLJS: true
+
+menu:
+  main:
+    - name: tags
+      url: tags/
+      weight: 10
+    - name: code
+      url: "https://github.com/caglarturali/javamastery"
+      weight: 20
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  highlight:
+    noClasses: false
+    lineNos: true
+    style: monokai
