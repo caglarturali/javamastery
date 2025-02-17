@@ -234,6 +234,8 @@ Starting from Month 4, a significant project will begin and continue until the e
 - Team collaboration
 - Interview preparation
 
+**Project Work**: Finalization, testing, and deployment
+
 ## Project Guidelines
 The project should be a non-trivial application that demonstrates mastery of:
 - Core Java features

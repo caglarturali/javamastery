@@ -1,6 +1,6 @@
-package blog.javamastery.dsa.stack;
+package blog.javamastery.datastructures.stack;
 
-import blog.javamastery.dsa.common.Streamable;
+import blog.javamastery.datastructures.common.Streamable;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -51,7 +51,7 @@ public class SimpleStack<T> implements Iterable<T>, Streamable<T> {
 
     public T pop() {
         if (isEmpty()) {
-            throw new IllegalAccessError("Nothing to pop");
+            return null;
         }
 
         var item = elements[--size];
@@ -66,7 +66,7 @@ public class SimpleStack<T> implements Iterable<T>, Streamable<T> {
 
     public T peek() {
         if (isEmpty()) {
-            throw new IllegalAccessError("Nothing to peek");
+            return null;
         }
         return elements[size - 1];
     }

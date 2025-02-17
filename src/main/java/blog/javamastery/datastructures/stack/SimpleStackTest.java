@@ -1,4 +1,4 @@
-package blog.javamastery.dsa.stack;
+package blog.javamastery.datastructures.stack;
 
 public class SimpleStackTest {
     public static void main(String[] args) {

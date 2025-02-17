@@ -1,4 +1,4 @@
-package blog.javamastery.dsa.common;
+package blog.javamastery.datastructures.common;
 
 import java.util.stream.Stream;
 
