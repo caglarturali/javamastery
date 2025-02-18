@@ -53,6 +53,8 @@ params:
 
   assets:
     disableHLJS: true
+    favicon: "/favicon.png"
+    apple_touch_icon: "/favicon.png"
 
 menu:
   main:
