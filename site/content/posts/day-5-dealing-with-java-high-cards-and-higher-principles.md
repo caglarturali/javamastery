@@ -2,7 +2,7 @@
 title: "Day #5: Dealing with Java: High Cards and Higher Principles 🃏"
 date: 2025-02-12
 description: "Building a complete multiplayer High Card game while exploring object-oriented features and clean code practices"
-tags: ["day-5", "card-game", "object-oriented", "clean-code"]
+tags: ["month-1", "week-1", "card-game", "object-oriented", "clean-code"]
 showToc: true
 TocOpen: false
 ---

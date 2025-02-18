@@ -2,7 +2,7 @@
 title: "Day #8: Stack Overflow? Not On Our Watch! ⚡️🛡️"
 date: 2025-02-15
 description: "Diving into data structure implementation with a robust generic stack while mastering clean code principles"
-tags: ["day-8", "data-structures", "clean-code", "generics"]
+tags: ["month-1", "week-2", "data-structures", "clean-code", "generics"]
 showToc: true
 TocOpen: false
 ---

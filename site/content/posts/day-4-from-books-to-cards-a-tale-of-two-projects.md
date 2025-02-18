@@ -2,7 +2,7 @@
 title: "Day #4: From Books to Cards: A Tale of Two Projects 🎴📚"
 date: 2025-02-11
 description: "Completing the reservation system and starting a new card game project while exploring Java features"
-tags: ["day-4", "card-game", "reservation-system", "java-features"]
+tags: ["month-1", "week-1", "card-game", "reservation-system", "java-features"]
 showToc: true
 TocOpen: false
 ---

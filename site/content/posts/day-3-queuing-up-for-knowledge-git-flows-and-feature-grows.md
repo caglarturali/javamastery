@@ -2,7 +2,7 @@
 title: "Day #3: Queuing Up for Knowledge: Git Flows and Feature Grows 📚🌱"
 date: 2025-02-10
 description: "Implementing a reservation system while mastering Git workflows and exploring Java concepts"
-tags: ["day-3", "git", "reservation-system", "java-features"]
+tags: ["month-1", "week-1", "git", "reservation-system", "java-features"]
 showToc: true
 TocOpen: false
 ---

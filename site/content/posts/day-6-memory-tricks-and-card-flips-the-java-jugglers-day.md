@@ -2,7 +2,7 @@
 title: "Day #6: Memory Tricks & Card Flips: The Java Juggler's Day 🎪"
 date: 2025-02-13
 description: "Exploring JVM architecture and memory management while enhancing our card game with debug features"
-tags: ["day-6", "jvm", "memory-management", "debugging"]
+tags: ["month-1", "week-1", "jvm", "memory-management", "debugging"]
 showToc: true
 TocOpen: false
 ---

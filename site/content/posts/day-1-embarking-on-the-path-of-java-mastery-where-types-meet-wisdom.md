@@ -2,7 +2,7 @@
 title: "Day #1: Embarking on the Path of Java Mastery: Where Types Meet Wisdom 🌟"
 date: 2025-02-08
 description: "Setting up our Java development environment and exploring modern language features through a Library Management System"
-tags: ["day-1", "environment-setup", "modern-java", "library-system"]
+tags: ["month-1", "week-1", "environment-setup", "modern-java", "library-system"]
 showToc: true
 TocOpen: false
 ---

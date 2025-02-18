@@ -2,7 +2,7 @@
 title: "Day #7: JVM Tales: From Mutable States to Immutable Fates 🎭"
 date: 2025-02-14
 description: "Exploring JVM architecture while evolving our Library Management System to use immutable records"
-tags: ["day-7", "jvm", "immutability", "library-system"]
+tags: ["month-1", "week-1", "jvm", "immutability", "library-system"]
 showToc: true
 TocOpen: false
 ---

@@ -2,7 +2,7 @@
 title: "Day #2: Apprentice's Java Journey: Building Bridges of Clean Architecture 🏗️"
 date: 2025-02-09
 description: "Restructuring the Library Management System with proper domain modeling and clean architecture principles"
-tags: ["day-2", "clean-architecture", "domain-modeling", "error-handling"]
+tags: ["month-1", "week-1", "clean-architecture", "domain-modeling", "error-handling"]
 showToc: true
 TocOpen: false
 ---

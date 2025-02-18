@@ -1,8 +1,8 @@
 ---
-title: "Day #9: Queue & Quality: Professional Patterns Emerge 🧪✨"
+title: "Day #9: Building Better: From Queue to Quality 🏗️✨"
 date: 2025-02-17
 description: "Implementing a queue data structure while transitioning to professional development practices with Maven and JUnit"
-tags: ["day-9", "queue", "maven", "testing", "project-structure"]
+tags: ["month-1", "week-2", "queue", "maven", "testing", "project-structure"]
 showToc: true
 TocOpen: false
 ---
