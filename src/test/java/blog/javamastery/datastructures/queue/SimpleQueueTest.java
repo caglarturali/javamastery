@@ -9,6 +9,7 @@ import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@DisplayName("Queue Operations")
 class SimpleQueueTest {
     private SimpleQueue<String> queue;
 
