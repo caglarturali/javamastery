@@ -15,6 +15,12 @@ minify:
   disableXML: true
   minifyOutput: true
 
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
+
 params:
   title: "Java Mastery Journey"
   description: "Chronicles of an apprentice's journey under AI guidance - mastering Java one day at a time"
@@ -52,6 +58,16 @@ params:
     - name: website
       url: "https://turali.js.org"
 
+  fuseOpts:
+    isCaseSensitive: false
+    shouldSort: true
+    location: 0
+    distance: 1000
+    threshold: 0.4
+    minMatchCharLength: 0
+    limit: 10
+    keys: [ "title", "permalink", "summary", "content" ]
+
   assets:
     disableHLJS: true
     favicon: "/favicon.png"
@@ -59,20 +75,18 @@ params:
 
 menu:
   main:
-    - name: tags
-      url: /tags/
+    - name: search
+      url: /search
       weight: 10
+    - name: tags
+      url: /tags
+      weight: 20
     - name: rss
       url: /index.xml
-      weight: 20
+      weight: 30
     - name: code
       url: "https://github.com/caglarturali/javamastery"
-      weight: 30
-
-outputs:
-  home:
-    - HTML
-    - RSS
+      weight: 40
 
 markup:
   goldmark:
