@@ -29,6 +29,7 @@ params:
   ShowCodeCopyButtons: true
   ShowWordCount: true
   ShowRssButtonInSectionTermList: true
+  ShowFullTextInRSS: true
   UseHugoToc: true
 
   homeInfoParams:
@@ -59,11 +60,19 @@ params:
 menu:
   main:
     - name: tags
-      url: tags/
+      url: /tags/
       weight: 10
+    - name: rss
+      url: /index.xml
+      weight: 20
     - name: code
       url: "https://github.com/caglarturali/javamastery"
-      weight: 20
+      weight: 30
+
+outputs:
+  home:
+    - HTML
+    - RSS
 
 markup:
   goldmark:

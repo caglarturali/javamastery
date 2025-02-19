@@ -16,3 +16,7 @@ Visit [javamastery.blog](https://javamastery.blog) to follow the journey.
 ## Projects
 
 All code from our daily sessions can be found in the `/src` directory, organized by packages.
+
+## Credits
+
+- [Java icon](https://www.flaticon.com/free-icon/java_226777) created by Freepik - Flaticon
