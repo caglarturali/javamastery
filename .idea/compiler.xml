@@ -6,7 +6,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="javamastery" />
+        <module name="card-game" />
+        <module name="playground" />
+        <module name="data-structures" />
+        <module name="library-system" />
       </profile>
     </annotationProcessing>
   </component>

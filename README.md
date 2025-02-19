@@ -4,18 +4,18 @@ This repository contains both the source code and the blog documenting my 6-mont
 
 ## Repository Structure
 
-- [`/src`](./src) - Source code for all projects developed during the learning journey
+- [`/data-structures`](./data-structures) - Implementation of fundamental data structures
+- [`/library-system`](./library-system) - Library management system application
+- [`/card-game`](./card-game) - Card game implementations
 - [`/site`](./site) - Hugo-based blog documenting the daily learning sessions
+
+Each module under the root project contains its own source code and tests following Maven's standard directory structure.
 
 ## Blog
 
 The blog is built with Hugo using the PaperMod theme and is automatically deployed to GitHub Pages when changes are made to the `/site` directory.
 
 Visit [javamastery.blog](https://javamastery.blog) to follow the journey.
-
-## Projects
-
-All code from our daily sessions can be found in the `/src` directory, organized by packages.
 
 ## Credits
 
