@@ -6,6 +6,9 @@ tags: ["curriculum", "learning-path", "overview"]
 showToc: true
 TocOpen: true
 weight: 1
+cover:
+  image: /images/guru.webp
+  hiddenInList: true
 ---
 
 Before diving into our daily sessions, my AI mentor and I reviewed and discussed this comprehensive 6-month curriculum together. This serves as our roadmap and will be referenced throughout our journey.
