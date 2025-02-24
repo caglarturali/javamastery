@@ -8,9 +8,14 @@
         <outputRelativeToContentRoot value="true" />
         <module name="card-game" />
         <module name="playground" />
+        <module name="fosposs-common" />
         <module name="data-structures" />
+        <module name="fosposs-desktop" />
         <module name="library-system" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="dev-tools" target="21" />
+    </bytecodeTargetLevel>
   </component>
 </project>

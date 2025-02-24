@@ -4,6 +4,7 @@ This repository contains both the source code and the blog documenting my 6-mont
 
 ## Repository Structure
 
+- [`/fosposs`](./fosposs) - Free and Open-Source POS Software
 - [`/data-structures`](./data-structures) - Implementation of fundamental data structures
 - [`/library-system`](./library-system) - Library management system application
 - [`/card-game`](./card-game) - Card game implementations
