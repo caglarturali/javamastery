@@ -5,10 +5,7 @@ import com.fosposs.common.db.exception.DatabaseException;
 import com.fosposs.common.db.repository.BaseRepository;
 import com.fosposs.common.model.Product;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.UUID;
 
 public class ProductRepository extends BaseRepository<Product, UUID> {
@@ -23,12 +20,13 @@ public class ProductRepository extends BaseRepository<Product, UUID> {
                         barcode TEXT,
                         price DECIMAL(10,2) NOT NULL,
                         cost DECIMAL(10,2) NOT NULL,
-                        category TEXT,
+                        category_id TEXT,
                         stock_quantity INTEGER NOT NULL,
                         min_stock_level INTEGER NOT NULL,
                         active BOOLEAN NOT NULL,
                         created_at TEXT NOT NULL,
                         updated_at TEXT NOT NULL
+                        FOREIGN KEY (category_id) REFERENCES categories(id)
                     )
                 """;
     }
@@ -37,7 +35,7 @@ public class ProductRepository extends BaseRepository<Product, UUID> {
     public Product save(Product product) throws DatabaseException {
         String sql = """
                     INSERT OR REPLACE INTO products (
-                        id, name, description, barcode, price, cost, category,
+                        id, name, description, barcode, price, cost, category_id,
                         stock_quantity, min_stock_level, active, created_at, updated_at
                     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """;
@@ -51,7 +49,11 @@ public class ProductRepository extends BaseRepository<Product, UUID> {
             stmt.setString(4, product.barcode());
             stmt.setBigDecimal(5, product.price());
             stmt.setBigDecimal(6, product.cost());
-            stmt.setString(7, product.category());
+            if (product.categoryId() != null) {
+                stmt.setString(7, product.categoryId().toString());
+            } else {
+                stmt.setNull(7, Types.VARCHAR);
+            }
             stmt.setInt(8, product.stockQuantity());
             stmt.setInt(9, product.minStockLevel());
             stmt.setBoolean(10, product.active());
@@ -117,6 +119,10 @@ public class ProductRepository extends BaseRepository<Product, UUID> {
     }
 
     private Product mapResultSetToProduct(ResultSet rs) throws SQLException {
+        UUID categoryId = rs.getString("category_id") != null
+                ? UUID.fromString(rs.getString("category_id"))
+                : null;
+
         return Product.builder()
                 .id(UUID.fromString(rs.getString("id")))
                 .name(rs.getString("name"))
@@ -124,7 +130,7 @@ public class ProductRepository extends BaseRepository<Product, UUID> {
                 .barcode(rs.getString("barcode"))
                 .price(rs.getBigDecimal("price"))
                 .cost(rs.getBigDecimal("cost"))
-                .category(rs.getString("category"))
+                .categoryId(categoryId)
                 .stockQuantity(rs.getInt("stock_quantity"))
                 .minStockLevel(rs.getInt("min_stock_level"))
                 .active(rs.getBoolean("active"))

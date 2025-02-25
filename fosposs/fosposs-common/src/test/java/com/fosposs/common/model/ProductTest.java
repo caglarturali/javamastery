@@ -22,7 +22,7 @@ class ProductTest {
         assertEquals("Test Product", product.name());
         assertEquals("", product.description());
         assertEquals(BigDecimal.ZERO, product.price());
-        assertEquals("Uncategorized", product.category());
+        assertNull(product.categoryId());
         assertTrue(product.active());
         assertNotNull(product.id());
     }
@@ -31,6 +31,7 @@ class ProductTest {
     @DisplayName("Builder should create a product with all fields set")
     void builderCreatesProductWithAllFields() {
         UUID id = UUID.randomUUID();
+        UUID categoryId = UUID.randomUUID();
 
         Product product = Product.builder()
                 .id(id)
@@ -39,7 +40,7 @@ class ProductTest {
                 .barcode("123456789")
                 .price(new BigDecimal("4.99"))
                 .cost(new BigDecimal("2.50"))
-                .category("Beverages")
+                .categoryId(categoryId)
                 .stockQuantity(100)
                 .minStockLevel(20)
                 .active(true)
@@ -52,7 +53,7 @@ class ProductTest {
                 () -> assertEquals("123456789", product.barcode()),
                 () -> assertEquals(new BigDecimal("4.99"), product.price()),
                 () -> assertEquals(new BigDecimal("2.50"), product.cost()),
-                () -> assertEquals("Beverages", product.category()),
+                () -> assertEquals(categoryId, product.categoryId()),
                 () -> assertEquals(100, product.stockQuantity()),
                 () -> assertEquals(20, product.minStockLevel()),
                 () -> assertTrue(product.active())
@@ -62,17 +63,18 @@ class ProductTest {
     @Test
     @DisplayName("Builder should support method chaining in any order")
     void builderSupportsMethodChainingInAnyOrder() {
+        UUID categoryId = UUID.randomUUID();
         Product product = Product.builder()
                 .price(new BigDecimal("9.99"))
                 .name("Chai Latte")
-                .category("Beverages")
+                .categoryId(categoryId)
                 .description("Spiced tea with milk")
                 .build();
 
         assertAll(
                 () -> assertEquals("Chai Latte", product.name()),
                 () -> assertEquals(new BigDecimal("9.99"), product.price()),
-                () -> assertEquals("Beverages", product.category()),
+                () -> assertEquals(categoryId, product.categoryId()),
                 () -> assertEquals("Spiced tea with milk", product.description())
         );
     }

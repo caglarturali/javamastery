@@ -11,7 +11,7 @@ public record Product(
         String barcode,
         BigDecimal price,
         BigDecimal cost,
-        String category,
+        UUID categoryId,
         int stockQuantity,
         int minStockLevel,
         boolean active,
@@ -54,7 +54,7 @@ public record Product(
         private String barcode;
         private BigDecimal price = BigDecimal.ZERO;
         private BigDecimal cost = BigDecimal.ZERO;
-        private String category = "Uncategorized";
+        private UUID categoryId;
         private int stockQuantity = 0;
         private int minStockLevel = 0;
         private boolean active = true;
@@ -91,8 +91,8 @@ public record Product(
             return this;
         }
 
-        public ProductBuilder category(String category) {
-            this.category = category;
+        public ProductBuilder categoryId(UUID categoryId) {
+            this.categoryId = categoryId;
             return this;
         }
 
@@ -114,7 +114,7 @@ public record Product(
         public Product build() {
             return new Product(
                     id, name, description, barcode, price, cost,
-                    category, stockQuantity, minStockLevel, active,
+                    categoryId, stockQuantity, minStockLevel, active,
                     createdAt, updatedAt
             );
         }

@@ -4,6 +4,8 @@ import com.fosposs.common.db.config.DatabaseConfig;
 import com.fosposs.common.db.config.SQLiteConfig;
 import com.fosposs.common.db.connection.ConnectionManager;
 import com.fosposs.common.db.exception.DatabaseException;
+import com.fosposs.common.db.repository.category.CategoryRepository;
+import com.fosposs.common.model.Category;
 import com.fosposs.common.model.Product;
 import org.junit.jupiter.api.*;
 
@@ -18,14 +20,19 @@ import static org.junit.jupiter.api.Assertions.*;
 class ProductRepositoryTest {
     private static DatabaseConfig config;
     private ProductRepository repository;
+    private CategoryRepository categoryRepository;
     private Product testProduct;
+    private Category testCategory;
 
     @BeforeAll
     static void setupDatabase() throws Exception {
         // Use in-memory SQLite database for testing
         config = new SQLiteConfig(Path.of(":memory:"));
         ConnectionManager.initialize(config);
-        config.initialize(List.of(ProductRepository.class));
+        config.initialize(List.of(
+                CategoryRepository.class,
+                ProductRepository.class)
+        );
     }
 
     @AfterAll
@@ -34,8 +41,14 @@ class ProductRepositoryTest {
     }
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws DatabaseException {
         repository = new ProductRepository();
+        categoryRepository = new CategoryRepository();
+
+        // Create and save a test category
+        testCategory = categoryRepository.save(
+                Category.builder().name("Test Category").build()
+        );
 
         testProduct = Product.builder()
                 .name("Test Coffee")
@@ -43,7 +56,7 @@ class ProductRepositoryTest {
                 .barcode("TEST123")
                 .price(new BigDecimal("3.99"))
                 .cost(new BigDecimal("2.00"))
-                .category("Beverages")
+                .categoryId(testCategory.id())
                 .stockQuantity(50)
                 .minStockLevel(10)
                 .build();
@@ -67,7 +80,7 @@ class ProductRepositoryTest {
         assertEquals("TEST123", retrieved.barcode());
         assertEquals(0, new BigDecimal("3.99").compareTo(retrieved.price()));
         assertEquals(0, new BigDecimal("2.00").compareTo(retrieved.cost()));
-        assertEquals("Beverages", retrieved.category());
+        assertEquals(testCategory.id(), retrieved.categoryId());
         assertEquals(50, retrieved.stockQuantity());
         assertEquals(10, retrieved.minStockLevel());
         assertTrue(retrieved.active());
@@ -76,6 +89,11 @@ class ProductRepositoryTest {
     @Test
     @DisplayName("Should update existing product")
     void shouldUpdateExistingProduct() throws DatabaseException {
+        // Create another category
+        Category anotherCategory = categoryRepository.save(
+                Category.builder().name("Another Category").build()
+        );
+
         // Save initial product
         Product saved = repository.save(testProduct);
 
@@ -87,7 +105,7 @@ class ProductRepositoryTest {
                 .barcode(saved.barcode())
                 .price(new BigDecimal("4.99"))
                 .cost(saved.cost())
-                .category(saved.category())
+                .categoryId(anotherCategory.id())
                 .stockQuantity(saved.stockQuantity())
                 .minStockLevel(saved.minStockLevel())
                 .build();
@@ -101,6 +119,7 @@ class ProductRepositoryTest {
         assertEquals("Updated Coffee", retrieved.name());
         assertEquals("Updated description", retrieved.description());
         assertEquals(0, new BigDecimal("4.99").compareTo(retrieved.price()));
+        assertEquals(anotherCategory.id(), retrieved.categoryId());
     }
 
     @Test
