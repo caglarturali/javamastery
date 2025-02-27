@@ -47,6 +47,10 @@ public record Product(
         return new ProductBuilder();
     }
 
+    public static ProductBuilder builder(Product product) {
+        return new ProductBuilder(product);
+    }
+
     public static class ProductBuilder {
         private UUID id = UUID.randomUUID();
         private String name;
@@ -60,6 +64,22 @@ public record Product(
         private boolean active = true;
         private final Instant createdAt = Instant.now();
         private final Instant updatedAt = createdAt;
+
+        public ProductBuilder() {
+        }
+
+        public ProductBuilder(Product product) {
+            this.id = product.id();
+            this.name = product.name();
+            this.description = product.description();
+            this.barcode = product.barcode();
+            this.price = product.price();
+            this.cost = product.cost();
+            this.categoryId = product.categoryId();
+            this.stockQuantity = product.stockQuantity();
+            this.minStockLevel = product.minStockLevel();
+            this.active = product.active();
+        }
 
         public ProductBuilder id(UUID id) {
             this.id = id;

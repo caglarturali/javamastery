@@ -42,6 +42,10 @@ public record Category(
         return new CategoryBuilder();
     }
 
+    public static CategoryBuilder builder(Category category) {
+        return new CategoryBuilder(category);
+    }
+
     public static class CategoryBuilder {
         private UUID id = UUID.randomUUID();
         private String name;
@@ -51,6 +55,18 @@ public record Category(
         private boolean active = true;
         private final Instant createdAt = Instant.now();
         private final Instant updatedAt = createdAt;
+
+        public CategoryBuilder() {
+        }
+
+        public CategoryBuilder(Category category) {
+            this.id = category.id();
+            this.name = category.name();
+            this.description = category.description();
+            this.parentId = category.parentId();
+            this.sortOrder = category.sortOrder();
+            this.active = category.active();
+        }
 
         public CategoryBuilder id(UUID id) {
             this.id = id;
