@@ -40,7 +40,7 @@ class CategoryRepositoryTest {
     }
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws DatabaseException {
         repository = new CategoryRepository();
         productRepository = new ProductRepository();
 
@@ -49,6 +49,9 @@ class CategoryRepositoryTest {
                 .description("Test description")
                 .sortOrder(1)
                 .build();
+
+        // Start fresh
+        repository.clear();
     }
 
     @Test
@@ -69,6 +72,59 @@ class CategoryRepositoryTest {
         assertNull(retrieved.parentId());
         assertEquals(1, retrieved.sortOrder());
         assertTrue(retrieved.active());
+    }
+
+    @Test
+    @DisplayName("Should retrieve all categories ordered by name")
+    void shouldRetrieveAllCategoriesOrdered() throws DatabaseException {
+        // Save some categories
+        repository.save(Category.builder().name("Category 1").build());
+        repository.save(Category.builder().name("Category 2").build());
+        repository.save(Category.builder().name("Category 3").build());
+
+        // Retrieve them
+        var categories = repository.findAll();
+
+        // Verify
+        assertNotNull(categories);
+        assertEquals(3, categories.size());
+        assertEquals(
+                List.of("Category 1", "Category 2", "Category 3"),
+                categories.stream().map(Category::name).toList()
+        );
+    }
+
+    @Test
+    @DisplayName("Search should return empty result when there is no match")
+    void searchReturnsEmptyNoMatch() throws DatabaseException {
+        // Save some categories
+        repository.save(Category.builder().name("Category 1").build());
+        repository.save(Category.builder().name("Category 2").build());
+        repository.save(Category.builder().name("Category 3").build());
+
+        // Search for a non-existent category
+        var categories = repository.search("Beverages");
+
+        // Verify empty result set
+        assertNotNull(categories);
+        assertTrue(categories.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Search should return matching categories")
+    void searchReturnsMatchingCategories() throws DatabaseException {
+        // Save some categories
+        repository.save(Category.builder().name("Some Category").build());
+        repository.save(Category.builder().name("Another Category").build());
+        repository.save(Category.builder().name("Beverages").build());
+
+        // Search for an existing category
+        var categories = repository.search("Category");
+
+        // Verify
+        assertNotNull(categories);
+        assertEquals(2, categories.size());
+        assertTrue(categories.stream().map(Category::name).allMatch(c -> c.contains("Category")));
     }
 
     @Test
@@ -104,9 +160,10 @@ class CategoryRepositoryTest {
         assertTrue(repository.exists(saved.id()));
 
         // Delete category
-        repository.delete(saved.id());
+        var isDeleted = repository.delete(saved.id());
 
         // Verify deletion
+        assertTrue(isDeleted);
         assertFalse(repository.exists(saved.id()));
         assertNull(repository.findById(saved.id()));
     }

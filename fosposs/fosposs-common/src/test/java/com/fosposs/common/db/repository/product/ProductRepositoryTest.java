@@ -60,6 +60,9 @@ class ProductRepositoryTest {
                 .stockQuantity(50)
                 .minStockLevel(10)
                 .build();
+
+        // Start fresh
+        repository.clear();
     }
 
     @Test
@@ -84,6 +87,59 @@ class ProductRepositoryTest {
         assertEquals(50, retrieved.stockQuantity());
         assertEquals(10, retrieved.minStockLevel());
         assertTrue(retrieved.active());
+    }
+
+    @Test
+    @DisplayName("Should retrieve all products ordered by name")
+    void shouldRetrieveAllProductsOrdered() throws DatabaseException {
+        // Save a couple of products
+        repository.save(Product.builder().name("Product 1").build());
+        repository.save(Product.builder().name("Product 2").build());
+        repository.save(Product.builder().name("Product 3").build());
+
+        // Retrieve them
+        var products = repository.findAll();
+
+        // Verify
+        assertNotNull(products);
+        assertEquals(3, products.size());
+        assertEquals(
+                List.of("Product 1", "Product 2", "Product 3"),
+                products.stream().map(Product::name).toList()
+        );
+    }
+
+    @Test
+    @DisplayName("Search should return empty result when there is no match")
+    void searchReturnsEmptyNoMatch() throws DatabaseException {
+        // Save a couple of products
+        repository.save(Product.builder().name("Coffee").build());
+        repository.save(Product.builder().name("Orange Juice").build());
+        repository.save(Product.builder().name("Water").build());
+
+        // Try to fetch a non-existent product
+        var products = repository.search("Tea");
+
+        // Verify empty result set
+        assertNotNull(products);
+        assertTrue(products.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Search should return matching products")
+    void searchReturnsMatchingProducts() throws DatabaseException {
+        // Save a couple of products
+        repository.save(Product.builder().name("Coffee").build());
+        repository.save(Product.builder().name("Orange Juice").build());
+        repository.save(Product.builder().name("Black Tea").build());
+
+        // Try to fetch an existent product
+        var products = repository.search("Tea");
+
+        // Verify results
+        assertNotNull(products);
+        assertEquals(1, products.size());
+        assertEquals("Black Tea", products.getFirst().name());
     }
 
     @Test
@@ -130,9 +186,10 @@ class ProductRepositoryTest {
         assertTrue(repository.exists(saved.id()));
 
         // Delete product
-        repository.delete(saved.id());
+        var isDeleted = repository.delete(saved.id());
 
         // Verify deletion
+        assertTrue(isDeleted);
         assertFalse(repository.exists(saved.id()));
         assertNull(repository.findById(saved.id()));
     }

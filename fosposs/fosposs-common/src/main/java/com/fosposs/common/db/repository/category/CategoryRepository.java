@@ -85,7 +85,26 @@ public class CategoryRepository extends BaseRepository<Category, UUID> {
     }
 
     @Override
-    public void delete(UUID id) throws DatabaseException {
+    public List<Category> findAll() throws DatabaseException {
+        String sql = "SELECT * FROM categories ORDER BY name, sort_order";
+
+        try (Connection conn = ConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            List<Category> categories = new ArrayList<>();
+            while (rs.next()) {
+                categories.add(mapResultSetToCategory(rs));
+            }
+            return categories;
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Failed to fetch all categories");
+        }
+    }
+
+    @Override
+    public boolean delete(UUID id) throws DatabaseException {
         if (hasChildren(id)) {
             throw new DatabaseException("Cannot delete category with child categories");
         }
@@ -100,7 +119,7 @@ public class CategoryRepository extends BaseRepository<Category, UUID> {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, id.toString());
-            stmt.executeUpdate();
+            return stmt.executeUpdate() != 0;
         } catch (SQLException e) {
             throw new DatabaseException("Failed to delete category with id: " + id, e);
         }
@@ -120,6 +139,42 @@ public class CategoryRepository extends BaseRepository<Category, UUID> {
             }
         } catch (SQLException e) {
             throw new DatabaseException("Failed to check existence of category with id: " + id, e);
+        }
+    }
+
+    @Override
+    public List<Category> search(String searchTerm) throws DatabaseException {
+        String sql = "SELECT * FROM categories WHERE name LIKE ? or description LIKE ? ORDER BY NAME, sort_order";
+        String term = "%" + searchTerm + "%";
+
+        try (Connection conn = ConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, term);
+            stmt.setString(2, term);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                List<Category> categories = new ArrayList<>();
+                while (rs.next()) {
+                    categories.add(mapResultSetToCategory(rs));
+                }
+                return categories;
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Failed to search categories by term: " + searchTerm, e);
+        }
+    }
+
+    @Override
+    public void clear() throws DatabaseException {
+        String sql = "DELETE FROM categories";
+
+        try (Connection conn = ConnectionManager.getConnection();
+             Statement stmt = conn.createStatement()) {
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            throw new DatabaseException("Failed to clear categories table", e);
         }
     }
 

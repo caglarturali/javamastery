@@ -6,6 +6,8 @@ import com.fosposs.common.db.repository.BaseRepository;
 import com.fosposs.common.model.Product;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class ProductRepository extends BaseRepository<Product, UUID> {
@@ -25,7 +27,7 @@ public class ProductRepository extends BaseRepository<Product, UUID> {
                         min_stock_level INTEGER NOT NULL,
                         active BOOLEAN NOT NULL,
                         created_at TEXT NOT NULL,
-                        updated_at TEXT NOT NULL
+                        updated_at TEXT NOT NULL,
                         FOREIGN KEY (category_id) REFERENCES categories(id)
                     )
                 """;
@@ -88,14 +90,33 @@ public class ProductRepository extends BaseRepository<Product, UUID> {
     }
 
     @Override
-    public void delete(UUID id) throws DatabaseException {
+    public List<Product> findAll() throws DatabaseException {
+        String sql = "SELECT * FROM products ORDER BY name";
+
+        try (Connection conn = ConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            List<Product> products = new ArrayList<>();
+            while (rs.next()) {
+                products.add(mapResultSetToProduct(rs));
+            }
+            return products;
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Failed to fetch all products", e);
+        }
+    }
+
+    @Override
+    public boolean delete(UUID id) throws DatabaseException {
         String sql = "DELETE FROM products WHERE id = ?";
 
         try (Connection conn = ConnectionManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, id.toString());
-            stmt.executeUpdate();
+            return stmt.executeUpdate() != 0;
         } catch (SQLException e) {
             throw new DatabaseException("Failed to delete product with id: " + id, e);
         }
@@ -115,6 +136,42 @@ public class ProductRepository extends BaseRepository<Product, UUID> {
             }
         } catch (SQLException e) {
             throw new DatabaseException("Failed to check existence of product with id: " + id, e);
+        }
+    }
+
+    @Override
+    public List<Product> search(String searchTerm) throws DatabaseException {
+        String sql = "SELECT * FROM products WHERE name LIKE ? OR description LIKE ? ORDER BY name";
+        String term = "%" + searchTerm + "%";
+
+        try (Connection conn = ConnectionManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, term);
+            stmt.setString(2, term);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                List<Product> products = new ArrayList<>();
+                while (rs.next()) {
+                    products.add(mapResultSetToProduct(rs));
+                }
+                return products;
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Failed to search products by term: " + searchTerm, e);
+        }
+    }
+
+    @Override
+    public void clear() throws DatabaseException {
+        String sql = "DELETE FROM products";
+
+        try (Connection conn = ConnectionManager.getConnection();
+             Statement stmt = conn.createStatement()) {
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            throw new DatabaseException("Failed to clear products table", e);
         }
     }
 
